@@ -1,4 +1,7 @@
 defmodule NflRushing.Stats.Player do
+  @moduledoc """
+  Map players records to %Player{} struct.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

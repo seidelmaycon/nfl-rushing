@@ -1,4 +1,5 @@
 defmodule NflRushing.Factory do
+  @moduledoc false
   use ExMachina.Ecto, repo: NflRushing.Repo
 
   alias NflRushing.Stats.Player
