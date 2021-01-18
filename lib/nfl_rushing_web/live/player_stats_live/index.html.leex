@@ -1,0 +1,67 @@
+<div class="header">
+  <img src="<%= Routes.static_path(@socket, "/images/thescore_logo.png") %>">
+  <div class="pipe"></div>
+  <span class="logo">NFL RUSHING </span>
+</div>
+
+<div class="search">
+  <label> Search by player's name <label>
+  <form phx-change="player-name-search" class="search-form">
+    <%= text_input :player, :name, placeholder: "Tom Brady", autofocus: true, "phx-debounce": "300", value: @player_name %>
+  </form>
+</div>
+
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Pos</th>
+      <th class="right">Att/G</th>
+      <th class="right">Att</th>
+      <th class="right sortable"> <%= sort_link(@socket, "Yds", :rushing_yards_total, %{sort_order: @sort_order}) %> </th>
+      <th class="right">Avg</th>
+      <th class="right">Yds/G</th>
+      <th class="right sortable"> <%= sort_link(@socket, "YD", :rushing_touchdown_total, %{sort_order: @sort_order}) %> </th>
+      <th class="right sortable"> <%= sort_link(@socket, "Lng", :longest_rush_yards, %{sort_order: @sort_order}) %> </th>
+      <th class="right">1st</th>
+      <th class="right">1st%</th>
+      <th class="right">20+</th>
+      <th class="right">40+</th>
+      <th class="right">FUM</th>
+    </tr>
+  </thead>
+  <tbody id="players"
+      phx-update="<%= @update_action %>"
+      phx-hook="InfiniteScroll"
+      data-page="<%= @page %>">
+    <%= for player <- @players do %>
+      <tr id="player-<%= player.id %>">
+        <td>
+          <%= player.name %>
+          </br>
+          <span><%= player.team %></span>
+        </td>
+        <td class="right"><%= player.position %></td>
+        <td class="right"><%= player.rushing_attemps_game_average %></td>
+        <td class="right"><%= player.rushing_attemps_total %></td>
+        <td class="right"><%= player.rushing_yards_total %></td>
+        <td class="right"><%= player.rushing_yards_attempt_average %></td>
+        <td class="right"><%= player.rushing_yards_game_average %></td>
+        <td class="right"><%= player.rushing_touchdown_total %></td>
+        <td class="right"><%= player.longest_rush_yards %><%= if player.longest_rush_with_touchdown, do: "T" %></td>
+        <td class="right"><%= player.first_downs_total %></td>
+        <td class="right"><%= player.first_down_percentage %></td>
+        <td class="right"><%= player.rushing_over_twenty_yards_count %></td>
+        <td class="right"><%= player.rushing_over_forty_yards_count %></td>
+        <td class="right"><%= player.rushing_fumbles %></td>
+      <tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="footer"
+    phx-hook="InfiniteScroll"
+    data-page-number="<%= @page %>">
+    <div class="loader"/>
+</div>
