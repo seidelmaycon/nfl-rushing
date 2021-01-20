@@ -48,5 +48,9 @@ defmodule NflRushing.Import.Players.ParserTest do
     test "with a malformed json file" do
       assert {:error, "Invalid JSON"} = Parser.from_json("test/fixtures/malformed.json")
     end
+
+    test "with a nonexistent json file" do
+      assert {:error, :enoent} = Parser.from_json("test/fixtures/nonexistent.json")
+    end
   end
 end

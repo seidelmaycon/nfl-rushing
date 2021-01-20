@@ -26,7 +26,8 @@ defmodule NflRushing.Import.Players.Parser do
          {:ok, records} when is_list(records) <- Jason.decode(binary) do
       {:ok, parse_all_records(records)}
     else
-      _ -> {:error, "Invalid JSON"}
+      {:ok, _binary} -> {:error, "Invalid JSON"}
+      error -> error
     end
   end
 

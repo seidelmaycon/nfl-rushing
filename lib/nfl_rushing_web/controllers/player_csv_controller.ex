@@ -3,11 +3,6 @@ defmodule NflRushingWeb.PlayerCsvController do
 
   alias NflRushing.Stats
 
-  @csv_columns ~w(name team position rushing_attemps_game_average rushing_attemps_total rushing_yards_total
-                  rushing_yards_attempt_average rushing_yards_game_average rushing_touchdown_total longest_rush_yards
-                  longest_rush_with_touchdown first_downs_total first_down_percentage rushing_over_twenty_yards_count
-                  rushing_over_forty_yards_count rushing_fumbles)a
-
   def export(conn, %{
         "sort_by" => sort_by,
         "sort_order" => sort_order,
@@ -27,21 +22,15 @@ defmodule NflRushingWeb.PlayerCsvController do
   end
 
   defp fetch_and_chunk_players(conn, sort_by, sort_order, player_name) do
-    conn |> chunk(Enum.join(@csv_columns, ",") <> "\n")
+    chunk(conn, Stats.csv_headers() <> "\n")
 
-    Stats.stream_players(@csv_columns, sort_by, sort_order, player_name, fn stream ->
+    Stats.stream_players_to_csv(sort_by, sort_order, player_name, fn stream ->
       for player <- stream do
-        parsed_player = player_struct_to_csv(player, @csv_columns) <> "\n"
-        conn |> chunk(parsed_player)
+        {:ok, parsed_player} = Stats.player_struct_to_csv(player)
+        conn |> chunk(parsed_player <> "\n")
       end
     end)
 
     conn
-  end
-
-  def player_struct_to_csv(player, columns) do
-    columns
-    |> Enum.map(&Map.get(player, &1))
-    |> Enum.join(",")
   end
 end
