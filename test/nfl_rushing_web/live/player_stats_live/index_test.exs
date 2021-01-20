@@ -46,13 +46,13 @@ defmodule NflRushingWeb.PlayerStatsLive.IndexTest do
             conn,
             :index,
             sort_by: :rushing_touchdown_total,
-            sort_order: :desc,
+            sort_order: "desc",
             page: 1,
             per_page: 15
           )
         )
 
-      [_, first_elem, second_elem, third_elem] = String.split(html, "tr id=")
+      [_, _, first_elem, second_elem, third_elem] = String.split(html, "tr id=")
 
       assert first_elem =~ player_1.name
       assert second_elem =~ player_2.name

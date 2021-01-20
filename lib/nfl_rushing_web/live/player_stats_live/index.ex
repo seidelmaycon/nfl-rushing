@@ -13,8 +13,8 @@ defmodule NflRushingWeb.PlayerStatsLive.Index do
         update_action: "append",
         page: 1,
         per_page: @per_page,
-        sort_by: :id,
-        sort_order: :asc,
+        sort_by: "id",
+        sort_order: "asc",
         player_name: ""
       )
       |> load_more_players()
@@ -45,8 +45,8 @@ defmodule NflRushingWeb.PlayerStatsLive.Index do
 
   def handle_params(params, _url, socket) do
     options = %{
-      sort_by: (params["sort_by"] || "id") |> String.to_atom(),
-      sort_order: (params["sort_order"] || "asc") |> String.to_atom(),
+      sort_by: params["sort_by"] || "id",
+      sort_order: params["sort_order"] || "asc",
       page: String.to_integer(params["page"] || "1"),
       per_page: @per_page,
       player_name: socket.assigns.player_name || ""
@@ -61,8 +61,8 @@ defmodule NflRushingWeb.PlayerStatsLive.Index do
 
   def handle_info({:run_player_name_search, name}, socket) do
     %{
-      sort_by: socket.assigns.sort_by || :id,
-      sort_order: socket.assigns.sort_order || :asc,
+      sort_by: socket.assigns.sort_by || "id",
+      sort_order: socket.assigns.sort_order || "asc",
       page: 1,
       per_page: @per_page,
       player_name: name
@@ -87,8 +87,8 @@ defmodule NflRushingWeb.PlayerStatsLive.Index do
     search_players(socket, %{
       page: socket.assigns.page || 1,
       per_page: socket.assigns.per_page || @per_page,
-      sort_by: socket.assigns.sort_by || :id,
-      sort_order: socket.assigns.sort_order || :asc,
+      sort_by: socket.assigns.sort_by || "id",
+      sort_order: socket.assigns.sort_order || "asc",
       player_name: socket.assigns.player_name || ""
     })
   end
@@ -121,6 +121,6 @@ defmodule NflRushingWeb.PlayerStatsLive.Index do
     )
   end
 
-  defp toggle_sort_order(:asc), do: :desc
-  defp toggle_sort_order(:desc), do: :asc
+  defp toggle_sort_order("asc"), do: "desc"
+  defp toggle_sort_order("desc"), do: "asc"
 end

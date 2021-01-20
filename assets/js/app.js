@@ -17,29 +17,30 @@ import { Socket } from "phoenix"
 import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
 
-let Hooks = {};
+let Hooks = {}
+
+let scrollAt = () => {
+  let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+  let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+  let clientHeight = document.documentElement.clientHeight
+
+  return scrollTop / (scrollHeight - clientHeight) * 100
+}
 
 Hooks.InfiniteScroll = {
-  mounted() {
-    console.log("Footer added to DOM!", this.el);
-    this.observer = new IntersectionObserver(entries => {
-      const entry = entries[0];
-      if (entry.isIntersecting) {
-        console.log("Footer is visible!");
-        this.pushEvent("load-more");
+  page() { return this.el.dataset.page },
+  mounted(){
+    this.pending = this.page()
+    window.addEventListener("scroll", e => {
+      if(this.pending == this.page() && scrollAt() > 90){
+        this.pending = this.page() + 1
+        this.pushEvent("load-more", {})
       }
-    });
-
-    this.observer.observe(this.el);
+    })
   },
-  updated() {
-    const pageNumber = this.el.dataset.pageNumber;
-    console.log("updated", pageNumber);
-  },
-  destroyed() {
-    this.observer.disconnect();
-  },
-};
+  reconnected(){ this.pending = this.page() },
+  updated(){ this.pending = this.page() }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

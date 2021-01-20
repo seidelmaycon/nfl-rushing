@@ -18,6 +18,7 @@ defmodule NflRushingWeb.Router do
     pipe_through :browser
 
     live "/", PlayerStatsLive.Index, :index
+    get "/player_csv", PlayerCsvController, :export
   end
 
   if Mix.env() in [:dev, :test] do

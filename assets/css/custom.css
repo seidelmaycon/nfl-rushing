@@ -37,7 +37,6 @@ tr td span {
 .sortable:hover {
   color: #E9B949;
   cursor: pointer;
-
 }
 
 table {
@@ -55,7 +54,6 @@ tbody tr td:first-child {
   width: 8em;
   min-width: 8em;
   max-width: 8em;
-  /* word-break: break-all; */
 }
 
 .right {
@@ -70,7 +68,12 @@ a {
   color: #E9B949;
 }
 
+.lng {
+  width: 72px;
+}
+
 .search {
+  height: 66px;
   width: 330px;
 }
 
@@ -99,4 +102,21 @@ img {
 
 input {
   color: #FFFAEB;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.export {
+  color: #FFFAEB;
+  font-size: 12px;
+}
+
+.export:hover {
+  color: #E9B949;
+  cursor: pointer;
+  text-decoration: underline;
 }
