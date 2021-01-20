@@ -74,3 +74,10 @@ If you have any questions regarding requirements, do not hesitate to email your 
 6. Run the application: `mix phx.server`
 
 Done: app is available in `http://localhost:4000`
+
+#### Tests
+
+There is a mix alias `mix ci` that setup de test database, compile the app, check if the code is formatted and run:
+- Unit tests with `ExUnit`
+- Coverage report with `ExCoveralls`
+- Static code analysis with `credo`
